@@ -57,16 +57,19 @@ class ExtractUtils:
         device_module: ExtractUtilsModule,
         device_vendor_commons: List[Tuple[str] | Tuple[str, str]],
     ):
-        common_modules: List[ExtractUtilsModule] = []
-        for device_vendor_common in device_vendor_commons:
-            device_common = device_vendor_common[0]
-            if len(device_vendor_common) == 2:
-                vendor_common = device_vendor_common[1]
-            else:
-                vendor_common = device_module.vendor
+        args = parse_args()
 
-            common_module = cls.get_module(device_common, vendor_common)
-            common_modules.append(common_module)
+        common_modules: List[ExtractUtilsModule] = []
+        if not args.only_target:
+            for device_vendor_common in device_vendor_commons:
+                device_common = device_vendor_common[0]
+                if len(device_vendor_common) == 2:
+                    vendor_common = device_vendor_common[1]
+                else:
+                    vendor_common = device_module.vendor
+
+                common_module = cls.get_module(device_common, vendor_common)
+                common_modules.append(common_module)
 
         return cls(device_module, common_modules)
 
